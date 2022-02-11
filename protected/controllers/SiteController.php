@@ -26,10 +26,39 @@ class SiteController extends Controller
 	 * when an action is not explicitly requested by users.
 	 */
 	public function actionIndex()
-	{
+	{	
+		$siteDAO = new SiteDAO();
+		$lotto_list=$siteDAO->Lotto_list();
+		$last_lotto=$siteDAO->Lotto_list(1);
+		$lotto_data="";
+		$last_data="";
+		$color_Arr=Array('num1'=>'#fbc400','num2'=>'#fbc400','num3'=>'#69c8f2','num4'=>'#69c8f2','num5'=>'#69c8f2','num6'=>'#b0d840');
+		
+		foreach($lotto_list as $rows){
+			$lotto_data.="<tr>";
+			foreach($rows as $row){
+			$lotto_data.="<td>".$row."</td>";
+			}
+			$lotto_data.="</tr>";
+		}
+		foreach($last_lotto as $i=>$rows){
+			if($i=="no"){
+			$last_data.=$rows." 회차<br/><br/>";
+			}else{
+			if($rows>9){
+				$last_data.="<span width='200px' height='200px' style='color:white;padding:10px;border-radius:50%;background:$color_Arr[$i]'>$rows</span>"." ";
+				}else{
+				$last_data.="<span width='200px' height='200px' style='color:white;padding:10px;border-radius:50%;background:$color_Arr[$i]'>0$rows</span>"." ";
+				}
+			}
+		}
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-		$this->render('index');
+		$this->render('index',
+		array(	'lotto_data'=>$lotto_data,
+				'last_data'=>$last_data
+				)
+		);
 	}
 
 	/**

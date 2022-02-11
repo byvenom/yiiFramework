@@ -2,7 +2,20 @@
 
 class SiteDAO
 {
-	
+	public function Lotto_list($chk=0){
+		$strSQL = "select * from lottos ";
+		if($chk==1){
+		$strSQL.="order by no desc limit 0,1";
+		}
+		$connection = Yii::app()->db;
+		$command = $connection->createCommand($strSQL);
+		if($chk==0){
+			$result = $command->queryAll();
+		}else{
+			$result = $command->queryRow();
+		}
+		return $result;
+	}
 	public function IdRepeatChk($userid){
 
 		$strSQL = "select count(*) total from users where userid = :userid";
